@@ -1,0 +1,43 @@
+name: Use private image from Quay
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  auth:
+    runs-on: ubuntu-latest
+    env:
+      QUAY_ROBOT_USER: thoughtful-code+githubactions
+    outputs:
+      quay-token: ${{ steps.quay-token.outputs.token }}
+    steps:
+      - name: Obtain OIDC token for Quay
+        id: quay-token
+        run: |
+          set -o pipefail
+
+          OIDC_TOKEN=$(curl -sSf -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -r .value)
+
+          QUAY_TOKEN=$(curl -sSf \
+            "https://quay.io/oauth2/federation/robot/token" \
+            -u "$QUAY_ROBOT_USER:$OIDC_TOKEN" | jq -r .token)
+
+          echo "token=$QUAY_TOKEN" >> $GITHUB_OUTPUT
+
+  use-image:
+    needs: auth
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/thoughtful-code/quay-oidc-demo:latest
+      credentials:
+        username: thoughtful-code+githubactions
+        password: ${{ needs.auth.outputs.quay-token }}
+    steps:
+      - name: Run inside the private image
+        run: cat /etc/os-release
