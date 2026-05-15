@@ -135,6 +135,5 @@ Push a commit to `main` and watch the action run! If you've set everything corre
 
 Learn more about OIDC with Quay and GitHub:
 
-- [Keyless authentication with robot accounts](https://docs.redhat.com/en/documentation/red_hat_quay/3.16/html/manage_red_hat_quay/keyless-authentication-robot-accounts) -- Red Hat Quay 3.16 documentation.
-- [Access Quay on OpenShift with short-lived credentials](https://developers.redhat.com/articles/2025/04/22/access-quay-openshift-short-lived-credentials) -- Red Hat Developer article on OpenShift integration.
-- [Red Hat Quay API guide](https://docs.redhat.com/en/documentation/red_hat_quay/3/html-single/red_hat_quay_api_guide/index) -- `/oauth2/federation/robot/token` endpoint details.
+- [Keyless authentication with robot accounts](https://docs.redhat.com/en/documentation/red_hat_quay/3.16/html/manage_red_hat_quay/keyless-authentication-robot-accounts) - Red Hat Quay 3.16 documentation.
+- [Access Quay on OpenShift with short-lived credentials](https://developers.redhat.com/articles/2025/04/22/access-quay-openshift-short-lived-credentials) - Red Hat Developer article on OpenShift integration.
