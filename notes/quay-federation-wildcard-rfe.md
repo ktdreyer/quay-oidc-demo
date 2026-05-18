@@ -101,7 +101,7 @@ If Quay prefers a simpler approach, `StringLike`-style matching (wildcards on in
 
 ## Workaround available today
 
-GitHub allows [customizing the subject claim template](https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect#customizing-the-subject-claims-for-an-organization-or-repository) at the org level. Setting `{"include_claim_keys": ["repository_owner"]}` changes the `sub` claim to `repository_owner:opendatahub-io`, which a single exact-match federation entry can match. However, this changes the subject format for the entire GitHub organization and will affect other OIDC integrations.
+GitHub allows [customizing the subject claim template](https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect#customizing-the-subject-claims-for-an-organization-or-repository) at the org level. Setting `{"include_claim_keys": ["repository_owner"]}` changes the `sub` claim to `repository_owner:opendatahub-io`, which a single exact-match federation entry can match. However, **this changes the subject format for the entire GitHub organization and will affect other OIDC integrations.** For ODH, this concern is not theoretical: we are already using OIDC to GCP Vertex for [live integration testing](https://github.com/opendatahub-io/ogx-distribution).
 
 ## Tested on
 
