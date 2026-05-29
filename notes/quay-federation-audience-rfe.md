@@ -47,6 +47,19 @@ $ACTIONS_ID_TOKEN_REQUEST_URL&audience=https://quay.io
 
 This ensures the token was minted specifically for Quay and cannot be replayed from another service exchange.
 
+## How other providers handle audience
+
+There is no universal convention for OIDC audience values. Each provider defines its own:
+
+- **AWS** hardcodes a global value: `sts.amazonaws.com`. Every client uses the same string. Simple, but inflexible.
+- **GCP** always enforces the `aud` claim. If the admin does not configure `allowed_audiences`, GCP defaults to requiring the workload identity provider's full resource path (e.g. `//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/pool/providers/provider`). See [GCP's REST API reference](https://docs.cloud.google.com/iam/docs/reference/rest/v1/projects.locations.workloadIdentityPools.providers).
+- **HashiCorp Vault** uses per-role `bound_audiences` configured by the admin. The client must match.
+- **PyPI** uses a discovery endpoint. The client GETs `https://upload.pypi.org/_/oidc/audience` and PyPI responds with the expected audience value. The client then requests an OIDC token with that audience. See [`oidc-exchange.py` in pypa/gh-action-pypi-publish](https://github.com/pypa/gh-action-pypi-publish/blob/main/oidc-exchange.py).
+
+PyPI's approach is the most robust: the server publishes its expected audience, so clients never have to guess. Without a published canonical value, clients must hardcode a string that may not match what the server eventually enforces.
+
+Quay could expose a similar discovery endpoint (e.g. `https://quay.io/_/oidc/audience`) so that clients always know the correct value.
+
 ## Tested on
 
 quay.io (SaaS), May 2026. Source code inspected at quay/quay commit `a56c75df4`.
