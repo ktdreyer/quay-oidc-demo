@@ -4,7 +4,7 @@
 
 ![GitHub repository settings page showing zero stored secrets in both the environment and repository categories](no-secrets-screenshot.png)
 
-Red Hat Quay supports *keyless* (ephemeral) robot-account authentication via OIDC. This means that you can authenticate GitHub Actions jobs to [quay.io](https://quay.io) to pull or push images without storing a long-lived token in a GitHub Action secret.
+[Red Hat Quay](https://www.redhat.com/en/technologies/cloud-computing/quay) supports *keyless* (ephemeral) robot-account authentication via OpenID Connect (OIDC). This means that you can authenticate GitHub Actions jobs to [quay.io](https://quay.io) to pull or push images without storing a long-lived token in a GitHub Action secret.
 
 Don't bury a static token in your GitHub settings that lives forever until it's accidentally exposed! Instead, let GitHub and Quay negotiate a one-time credential every time your CI runs.
 
