@@ -127,8 +127,6 @@ Push a commit to `main` and watch the action run! If you've set everything corre
 
  * **Lock down who can push:** You could scope the `subject` to a GitHub Actions [environment](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-deployments/managing-environments-for-deployment) with `repo:ktdreyer/quay-oidc-demo:environment:production`. This further limits which CI jobs can push images.
 
- * **Scaling to many GitHub repos:** As a more advanced configuration, you can [customize GitHub's subject claim template](https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect#customizing-the-subject-claims-for-an-organization-or-repository) at the GitHub org level to include fields like `repository_owner` or `repository_visibility` to permit access to certain *categories* of GitHub repos. See [GitHub's OIDC reference](https://docs.github.com/en/actions/reference/openid-connect-reference) for the full list of subject claims.
-
  * **Beyond GitHub:** OIDC will also work with Git forges like [GitLab](https://docs.gitlab.com/ci/secrets/id_token_authentication/) or [Forgejo](https://forgejo.org/docs/next/user/actions/security-openid-connect/).
 
  * **Pulling a private base image:** In our example, we built an image from a public base and pushed it at the end. If you wanted to pull a *private base image* in your build process, you would simply authenticate to Quay with OIDC first *before* building. If your build process takes longer than an hour, you'd authenticate to Quay a second time in the job for the push operation.
