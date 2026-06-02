@@ -2,7 +2,7 @@
 
 "This repository has no secrets". Who doesn't want this screenshot to provide to a security auditor, right?
 
-![No secrets screenshot](no-secrets-screenshot.png)
+![GitHub repository settings page showing zero stored secrets in both the environment and repository categories](no-secrets-screenshot.png)
 
 Red Hat Quay supports *keyless* (ephemeral) robot-account authentication via OIDC. This means that you can authenticate GitHub Actions jobs to [quay.io](https://quay.io) to pull or push images without storing a long-lived token in a GitHub Action secret.
 
