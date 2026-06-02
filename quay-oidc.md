@@ -61,7 +61,7 @@ Note that the GitHub owner (`ktdreyer`) or org does not need to match the Quay o
 
 ## Step 3: Use the OIDC token in a GitHub Actions workflow
 
-Here's the fun part. Do not even *think* about adding a static Quay token as a GitHub Actions secret! That's so 2025!
+Here's the fun part: no secrets required.
 
 ```yaml
 # .github/workflows/build-push.yml
