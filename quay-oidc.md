@@ -6,6 +6,8 @@
 
 [Red Hat Quay](https://www.redhat.com/en/technologies/cloud-computing/quay) supports *keyless* (ephemeral) robot-account authentication via OpenID Connect (OIDC). This means that you can authenticate GitHub Actions jobs to [quay.io](https://quay.io) to pull or push images without storing a long-lived token in a GitHub Action secret.
 
+This makes it easier to ship your software because you can add new repositories to your build pipeline without touching GitHub secrets at all. There's no secret API key to create, nothing to rotate, and nothing to revoke if a secret leaks or someone leaves the team.
+
 Don't bury a static token in your GitHub settings that lives forever until it's accidentally exposed! Instead, let GitHub and Quay negotiate a one-time credential every time your CI runs.
 
 **In short:**
