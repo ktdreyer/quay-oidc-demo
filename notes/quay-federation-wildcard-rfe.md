@@ -99,6 +99,45 @@ For backward compatibility, existing `{"issuer", "subject"}` entries would conti
 
 If Quay prefers a simpler approach, `StringLike`-style matching (wildcards on individual claim values, not on concatenated strings) would be a safe middle ground — matching AWS's well-established pattern.
 
+## Security: path reuse and mutable identifiers
+
+The scalability problem above has a security counterpart. On both GitHub and GitLab, organization/group and project paths can be renamed, deleted, and re-created by other users. OIDC trust relationships that rely solely on path-based claims like `sub` may grant access to unintended actors if a deleted project is re-created under the same path.
+
+AWS recently emailed all customers with GitLab OIDC trust relationships, recommending they add conditions on stable, unique identifiers — such as `namespace_id` or `project_id` — rather than relying on path-based claims alone. The same principle applies to GitHub, where `repository_owner` and `repository` are mutable names.
+
+Both providers include immutable numeric claims in their OIDC tokens:
+
+**GitHub Actions:**
+
+| Mutable (name-based) | Immutable (ID-based) |
+| :---- | :---- |
+| `repository` | `repository_id` |
+| `repository_owner` | `repository_owner_id` |
+
+**GitLab CI:**
+
+| Mutable (path-based) | Immutable (ID-based) |
+| :---- | :---- |
+| `project_path` | `project_id` |
+| `namespace_path` | `namespace_id` |
+
+AWS, Azure, and GCP all recommend matching on immutable IDs. Azure's [claims matching expression docs](https://learn.microsoft.com/en-us/entra/workload-id/workload-identities-set-up-flexible-federated-identity-credential?tabs=azure-portal%2Cgithub#set-up-a-flexible-federated-identity-credential) explicitly warn against name-based claims because names can be transferred. AWS now supports validating additional custom claims (beyond `sub`) from both GitHub and GitLab IdPs in IAM role trust policies specifically to enable this.
+
+Because Quay can only match on the `sub` claim, and `sub` is composed of mutable names, there is no way to use immutable IDs today. Supporting individual claim matching (as proposed above) would let users write federation entries like:
+
+```json
+[
+  {
+    "issuer": "https://token.actions.githubusercontent.com",
+    "claims": {
+      "repository_owner_id": "123456"
+    }
+  }
+]
+```
+
+This would be resilient to path changes regardless of GitHub or GitLab name transfers.
+
 ## Workaround available today
 
 GitHub allows [customizing the subject claim template](https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect#customizing-the-subject-claims-for-an-organization-or-repository) at the org level. Setting `{"include_claim_keys": ["repository_owner"]}` changes the `sub` claim to `repository_owner:opendatahub-io`, which a single exact-match federation entry can match. However, **this changes the subject format for the entire GitHub organization and will affect other OIDC integrations.** For ODH, this concern is not theoretical: we are already using OIDC to GCP Vertex for [live integration testing](https://github.com/opendatahub-io/ogx-distribution).
