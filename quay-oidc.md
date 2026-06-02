@@ -18,7 +18,7 @@ I've based this guide on [Quay's product docs: Keyless authentication with robot
 
 ---
 
-## Part 1: Create a repository and robot account in Quay
+## Step 1: Create a repository and robot account in Quay
 
 First we need somewhere for your container images to land. This takes about 30 seconds.
 
@@ -36,7 +36,7 @@ Now we must grant the robot write permission on the target repository:
 
 ---
 
-## Part 2: Set up robot-account federation (linking Quay to GitHub's OIDC provider)
+## Step 2: Set up robot-account federation (linking Quay to GitHub's OIDC provider)
 
 We're going to configure Quay.io to trust the OIDC tokens that your GitHub Action will mint.
 
@@ -57,7 +57,7 @@ Note that the GitHub owner (`ktdreyer`) or org does not need to match the Quay o
 
 ---
 
-## Part 3: Use the OIDC token in a GitHub Actions workflow
+## Step 3: Use the OIDC token in a GitHub Actions workflow
 
 Here's the fun part. Do not even *think* about adding a static Quay token as a GitHub Actions secret! That's so 2025!
 
