@@ -31,7 +31,7 @@ Next, create a **Robot Account** that can push images to this repository:
 2. Click **Create Robot Account** and give it a name. I called mine `githubactions`.
 3. Remember this bot's full Quay **username** (`<org>+<robot-name>`). You'll need it later in your GitHub Action YAML. In my example, my quay org is `thoughtful-code`, so I have `thoughtful-code+githubactions`. (As of Quay 3.16, robot federation only works for robot accounts in Quay *orgs*, not robot accounts for individual Quay users.)
 
-Now we must grant the robot write permission on the target repository:
+Now we grant the robot write permission on the target repository:
 1. Go to the repository in Quay (e.g. `your-quay-org/quay-oidc-demo`).
 2. Click **Settings > User and Robot Permissions**.
 3. Add the robot account and set its role to **Write**.
