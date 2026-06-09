@@ -44,6 +44,7 @@ We're going to configure Quay.io to trust the OIDC tokens that your GitHub Actio
 
    - In Quay, go to **Organizations > (your-quay-org) > Robot Accounts**
    - Click the kebab menu icon [⋮] and choose **Set robot federation**.
+    ![quay kebab menu expanded to "Set Robot Federation"](set-robot-federation.png)
    - Click **+** and fill in:
 
 | Field | Value |
@@ -56,6 +57,8 @@ We're going to configure Quay.io to trust the OIDC tokens that your GitHub Actio
 The `Subject` is important for security. It limits "who" and "what" can authenticate to Quay. In this example, I only allow actions in my `ktdreyer/quay-oidc-demo` Git repository, and only Actions that run directly on the `main` branch. Quay will reject tokens from actions on "work-in-progress" branches or forks.
 
 Note that the GitHub owner (`ktdreyer`) or org name string does not necessarily need to match the Quay org (`thoughtful-code`). The `subject` controls *who can mint the token*; the Quay org controls *where the image lands*.
+
+![quay robot identity configuration settings showing the GitHub issuer URL and subject](robot-identity-federation-config.png)
 
 ---
 
