@@ -24,10 +24,10 @@ I've based this guide on [Quay's product docs: Keyless authentication with robot
 
 First we need somewhere for your container images to land. This takes about 30 seconds.
 
-To create a new repository, in the [Quay UI](https://quay.io/): **Organizations > \<your-quay-org\> > Create New Repository**. In my example, my quay org is `thoughtful-code`, so I created `thoughtful-code/quay-oidc-demo`.
+To create a new repository, in the [Quay UI](https://quay.io/): **Organizations > (your-quay-org) > Create New Repository**. In my example, my quay org is `thoughtful-code`, so I created `thoughtful-code/quay-oidc-demo`.
 
 Next, create a **Robot Account** that can push images to this repository:
-1. In the Quay UI go to **Organizations > \<your-quay-org\> > Robot Accounts**.
+1. In the Quay UI go to **Organizations > (your-quay-org) > Robot Accounts**.
 2. Click **Create Robot Account** and give it a name. I called mine `githubactions`.
 3. Remember this bot's full Quay **username** (`<org>+<robot-name>`). You'll need it later in your GitHub Action YAML. In my example, my quay org is `thoughtful-code`, so I have `thoughtful-code+githubactions`. (As of Quay 3.16, robot federation only works for robot accounts in Quay *orgs*, not robot accounts for individual Quay users.)
 
@@ -42,7 +42,7 @@ Now we must grant the robot write permission on the target repository:
 
 We're going to configure Quay.io to trust the OIDC tokens that your GitHub Action will mint.
 
-   - In Quay, go to **Organizations > \<your-org\> > Robot Accounts**
+   - In Quay, go to **Organizations > (your-quay-org) > Robot Accounts**
    - Click the kebab menu icon [⋮] and choose **Set robot federation**.
    - Click **+** and fill in:
 
