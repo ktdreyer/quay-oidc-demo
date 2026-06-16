@@ -13,7 +13,7 @@ This makes it easier to ship your software because you can add new repositories 
 **In short:**
 
 1. **Create a robot account** in Quay.
-2. **Configure robot federation** pointing to GitHub's OIDC issuer and set the subject to match your repository (example: `repo:ktdreyer/quay-oidc-demo:ref:refs/heads/main`).
+2. **Configure robot federation** pointing to GitHub's OIDC issuer and set the subject to match your repository (example: `repo:ktdreyer@620295/quay-oidc-demo@1238958648:ref:refs/heads/main`).
 3. In GitHub Action workflow, **request an OIDC token** from Github, **exchange it** for a short-lived Quay robot token, and **use that token** to log in to Quay and push/pull images.
 
 I've based this guide on [Quay's product docs: Keyless authentication with robot accounts](https://docs.redhat.com/en/documentation/red_hat_quay/3.16/html/manage_red_hat_quay/keyless-authentication-robot-accounts).
@@ -42,6 +42,12 @@ Now we grant the robot write permission on the target repository:
 
 We're going to configure Quay.io to trust the OIDC tokens that your GitHub Action will mint.
 
+First, we need to determine your GitHub repo's subject claim string. To find this, go to your GitHub repository's **Settings > Actions > OIDC**. Check the **Use immutable subject claim** box ([default for new repos](https://github.blog/changelog/2026-04-23-immutable-subject-claims-for-github-actions-oidc-tokens/)), and copy the **Default subject claim prefix**. You'll append `:ref:refs/heads/main` to this when you configure your robot account federation in Quay.
+
+![GitHub repository OIDC settings page showing the immutable subject claim prefix](oidc-github-settings.png)
+
+Back to Quay:
+
    - In Quay, go to **Organizations > (your-quay-org) > Robot Accounts**
    - Click the kebab menu icon [⋮] and choose **Set robot federation**.
     ![quay kebab menu expanded to "Set Robot Federation"](set-robot-federation.png)
@@ -50,11 +56,11 @@ We're going to configure Quay.io to trust the OIDC tokens that your GitHub Actio
 | Field | Value |
 | :---- | :---- |
 | **Issuer URL** | `https://token.actions.githubusercontent.com` |
-| **Subject** | `repo:ktdreyer/quay-oidc-demo:ref:refs/heads/main` (adjust to match your GitHub repository and ref) |
+| **Subject** | `repo:ktdreyer@620295/quay-oidc-demo@1238958648:ref:refs/heads/main` (use your own repository's immutable subject prefix. See above.) |
 
    - Click **Save**.
 
-The `Subject` is important for security. It limits "who" and "what" can authenticate to Quay. In this example, I only allow actions in my `ktdreyer/quay-oidc-demo` Git repository, and only Actions that run directly on the `main` branch. Quay will reject tokens from actions on "work-in-progress" branches or forks.
+The `Subject` limits "who" and "what" can authenticate to Quay. In this example, I only allow actions in my `ktdreyer/quay-oidc-demo` Git repository, and only Actions that run directly on the `main` branch. Quay will reject tokens from actions on "work-in-progress" branches or forks.
 
 Note that the GitHub owner (`ktdreyer`) or org name string does not necessarily need to match the Quay org (`thoughtful-code`). The `subject` controls *who can mint the token*; the Quay org controls *where the image lands*.
 
@@ -130,7 +136,7 @@ Push a commit to `main` and watch the action run! If you've set everything corre
 
 ## Where to go from here
 
- * **Lock down who can push:** You could scope the `subject` to a GitHub Actions [environment](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-deployments/managing-environments-for-deployment) with `repo:ktdreyer/quay-oidc-demo:environment:production`. This further limits which CI jobs can push images.
+ * **Lock down who can push:** You could scope the `subject` to a GitHub Actions [environment](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-deployments/managing-environments-for-deployment) with `repo:ktdreyer@620295/quay-oidc-demo@1238958648:environment:production`. This further limits which CI jobs can push images.
 
  * **Beyond GitHub:** OIDC will also work with Git forges like [GitLab](https://docs.gitlab.com/ci/secrets/id_token_authentication/) or [Forgejo](https://forgejo.org/docs/next/user/actions/security-openid-connect/).
 

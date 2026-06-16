@@ -50,13 +50,15 @@ curl -s -X PUT \
 
 The request body is a JSON array of `{"issuer", "subject"}` objects. You can include multiple entries to allow the same robot to authenticate from different repositories or providers.
 
+The subject includes immutable numeric IDs unique to your GitHub owner and repository. Find your prefix in your GitHub repository's **Settings > Actions > OIDC** under **Default subject claim prefix**, then append your ref (e.g. `:ref:refs/heads/main`). See [the blog post](quay-oidc.md#step-2-set-up-robot-account-federation-linking-quay-to-githubs-oidc-provider) for a screenshot.
+
 **Important:** POST uses **replace semantics** — it overwrites the entire federation config for the robot. If you want to add an entry to an existing config, GET the current config first, add the new entry to the array, and POST the full array back.
 
 ```bash
 curl -s -X POST \
   -H "Authorization: Bearer $QUAY_API_TOKEN" \
   -H "Content-Type: application/json" \
-  -d '[{"issuer":"https://token.actions.githubusercontent.com","subject":"repo:<owner>/<repo>:ref:refs/heads/<branch>"}]' \
+  -d '[{"issuer":"https://token.actions.githubusercontent.com","subject":"repo:<owner>@<owner-id>/<repo>@<repo-id>:ref:refs/heads/<branch>"}]' \
   "https://quay.io/api/v1/organization/<org>/robots/<robot-name>/federation"
 ```
 
@@ -66,7 +68,7 @@ Example with a single entry:
 curl -s -X POST \
   -H "Authorization: Bearer $QUAY_API_TOKEN" \
   -H "Content-Type: application/json" \
-  -d '[{"issuer":"https://token.actions.githubusercontent.com","subject":"repo:thoughtful-code/claudio:ref:refs/heads/main"}]' \
+  -d '[{"issuer":"https://token.actions.githubusercontent.com","subject":"repo:thoughtful-code@198234567/claudio@987654321:ref:refs/heads/main"}]' \
   "https://quay.io/api/v1/organization/thoughtful-code/robots/githubactions/federation"
 ```
 
@@ -77,8 +79,8 @@ curl -s -X POST \
   -H "Authorization: Bearer $QUAY_API_TOKEN" \
   -H "Content-Type: application/json" \
   -d '[
-    {"issuer":"https://token.actions.githubusercontent.com","subject":"repo:thoughtful-code/claudio:ref:refs/heads/main"},
-    {"issuer":"https://token.actions.githubusercontent.com","subject":"repo:ktdreyer/quay-oidc-demo:ref:refs/heads/main"}
+    {"issuer":"https://token.actions.githubusercontent.com","subject":"repo:thoughtful-code@198234567/claudio@987654321:ref:refs/heads/main"},
+    {"issuer":"https://token.actions.githubusercontent.com","subject":"repo:ktdreyer@620295/quay-oidc-demo@1238958648:ref:refs/heads/main"}
   ]' \
   "https://quay.io/api/v1/organization/thoughtful-code/robots/githubactions/federation"
 ```
