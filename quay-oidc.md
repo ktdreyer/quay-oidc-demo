@@ -142,7 +142,7 @@ Push a commit to `main` and watch the action run! If you've set everything corre
 
  * **Pulling a private base image:** In our example, we built an image from a public base and pushed it at the end. If you wanted to pull a *private base image* in your build process, you would simply authenticate to Quay with OIDC first *before* building. If your build process takes longer than an hour, you'd authenticate to Quay a second time in the job for the push operation.
 
- * **[Fork the demo repo](https://github.com/ktdreyer/quay-oidc-demo)** to try this with your own Quay org. Edit the workflow and Containerfile to fit your needs.
+ * **[Fork the demo repo](https://github.com/ktdreyer/quay-oidc-demo)** to try this with your own Quay org. Edit the workflow and `Containerfile` to fit your needs.
 
  * **[Read the full keyless authentication docs](https://docs.redhat.com/en/documentation/red_hat_quay/3.16/html/manage_red_hat_quay/keyless-authentication-robot-accounts)** for the complete reference on robot-account federation in Red Hat Quay 3.16.
 
