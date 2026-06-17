@@ -13,7 +13,7 @@ This makes it easier to ship your software because you can add new repositories 
 **In short:**
 
 1. **Create a robot account** in Quay.
-2. **Configure robot federation** pointing to GitHub's OIDC issuer and set the subject to match your repository (example: `repo:ktdreyer@620295/quay-oidc-demo@1238958648:ref:refs/heads/main`).
+2. **Configure robot federation** pointing to GitHub's OIDC issuer and set the subject to match your repository.
 3. In GitHub Action workflow, **request an OIDC token** from Github, **exchange it** for a short-lived Quay robot token, and **use that token** to log in to Quay and push/pull images.
 
 I've based this guide on [Quay's product docs: Keyless authentication with robot accounts](https://docs.redhat.com/en/documentation/red_hat_quay/3.16/html/manage_red_hat_quay/keyless-authentication-robot-accounts).
